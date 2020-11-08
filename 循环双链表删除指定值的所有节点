@@ -1,0 +1,317 @@
+循环双链表删除指定值的所有节点
+描述
+习题要求：
+
+f. 已知有一个循环双链表，设计一个算法从该循环双链表中删除值为指定值的所有节点。
+
+
+
+用例1：
+
+假设输入为：
+
+6
+
+1 2 4 4 4 5
+
+4
+
+则输出为：
+
+初始值为:1 2 4 4 4 5
+
+删除值为4的结点后为:1 2 5
+
+
+
+用例2：
+
+假设输入为：
+
+6
+
+1 1 1 2 2 2
+
+2
+
+则输出为：
+
+初始值为:1 1 1 2 2 2
+
+删除值为2的结点后为:1 1 1
+
+
+
+用例3：
+
+假设输入为：
+
+5
+
+1 2 3 4 5
+
+4
+
+则输出为：
+
+初始值为:1 2 3 4 5
+
+删除值为4的结点后为:1 2 3 5
+
+
+
+用例4：
+
+假设输入为：
+
+6
+
+1 3 1 4 1 5
+
+1
+
+则输出为：
+
+初始值为:1 3 1 4 1 5
+
+删除值为1的结点后为:3 4 5
+
+
+
+用例5：
+
+假设输入为：
+
+10
+
+1 2 3 4 4 4 4 5 6 7 
+
+4
+
+则输出为：
+
+初始值为:1 2 3 4 4 4 4 5 6 7
+
+删除值为4的结点后为:1 2 3 5 6 7
+
+
+
+用例6：
+
+假设输入为：
+
+5
+
+1 1 1 1 1
+
+1
+
+则输出为：
+
+初始值为:1 1 1 1 1
+
+删除值为1的结点后为:
+
+
+
+
+
+
+
+题目
+
+/* 课后习题1.8-f 
+	
+	f.	已知有一个循环双链表，p指向第一个元素为x的指针，设计一个算法从该循环双链表中删除*p结点。
+		void deletelinknode(int num)
+
+*/
+#include <iostream>
+using namespace std;
+class linknode {
+public:
+    int data;
+    linknode *next, *prev;
+    linknode(int info = 0, linknode* nextpr = NULL, linknode* prevpr = NULL)
+    {
+        data = info;
+        next = nextpr;
+        prev = prevpr;
+    }
+};
+class linklist {
+public:
+    linknode *head, *tail;
+    linklist()
+    {
+        head = tail = NULL;
+    }
+    void push(int num)
+    {
+        if (head == NULL) {
+            head = tail = new linknode(num);
+            head->next = NULL;
+            tail->next = head;
+        } else {
+            linknode* p = new linknode(num);
+            tail->next = p;
+            p->prev = tail;
+            tail = p;
+            tail->next = head;
+        }
+    }
+    /*
+	TODO：循环双链表删除结点，删除值为num的所有结点
+	 */
+    void deletelinknode(int num)
+    {
+    }
+    void display()
+    {
+        if (head == tail) {
+            return; //说明没有元素，直接返回即可
+        }
+        for (linknode* p = head;; p = p->next) {
+            if (p == tail) {
+                cout << tail->data << endl;
+                break;
+            }
+            cout << p->data << " ";
+        }
+    }
+};
+
+int main()
+{
+    linklist ll;
+    int count, value;
+    cin >> count;
+    for (int i = 0; i < count; i++) {
+        cin >> value;
+        ll.push(value);
+    }
+    cout << "初始值为:";
+    ll.display();
+    cin >> value;
+    ll.deletelinknode(value);
+    cout << "删除值为" << value << "的结点后为:";
+    ll.display();
+    return 0;
+}
+
+
+
+
+答案：
+
+
+
+/* 课后习题1.8-f 
+	
+	f.	已知有一个循环双链表，p指向第一个元素为x的指针，设计一个算法从该循环双链表中删除*p结点。
+		void deletelinknode(int num)
+
+*/
+#include <iostream>
+using namespace std;
+class linknode {
+public:
+    int data;
+    linknode *next, *prev;
+    linknode(int info = 0, linknode* nextpr = NULL, linknode* prevpr = NULL)
+    {
+        data = info;
+        next = nextpr;
+        prev = prevpr;
+    }
+};
+class linklist {
+public:
+    linknode *head, *tail;
+    linklist()
+    {
+        head = tail = NULL;
+    }
+    void push(int num)
+    {
+        if (head == NULL) {
+            head = tail = new linknode(num);
+            head->next = NULL;
+            tail->next = head;
+        } else {
+            linknode* p = new linknode(num);
+            tail->next = p;
+            p->prev = tail;
+            tail = p;
+            tail->next = head;
+        }
+    }
+    /*
+	TODO：循环双链表删除结点，删除值为num的所有结点
+	 */
+    void deletelinknode(int num)
+    {
+        int i = 0;
+        linknode* p = head;
+        while (p != tail) {
+            if (p->data == num) {
+                linknode* ptmp = p->next;
+                if (p == head) { //如果head的值就是要删除的，那要对head进行调整
+                    head = ptmp;
+                }
+                if (NULL != p->prev) {
+                    p->prev->next = p->next;
+                }
+                if (NULL != p->next) {
+                    p->next->prev = p->prev;
+                }
+                p->next = NULL;
+                p->prev = NULL;
+                delete p;
+                p = ptmp;
+            } else {
+                p = p->next;
+            }
+        }
+        if (head != tail && tail->data == num) {
+            linknode* q = tail->prev;
+            tail->prev->next = tail->next;
+            tail->next->prev = tail->prev;
+            tail->next = NULL;
+            tail->prev = NULL;
+            delete tail;
+            tail = q;
+        }
+    }
+    void display()
+    {
+        if (head == tail) {
+            return; //说明没有元素，直接返回即可
+        }
+        for (linknode* p = head;; p = p->next) {
+            if (p == tail) {
+                cout << tail->data << endl;
+                break;
+            }
+            cout << p->data << " ";
+        }
+    }
+};
+
+int main()
+{
+    linklist ll;
+    int count, value;
+    cin >> count;
+    for (int i = 0; i < count; i++) {
+        cin >> value;
+        ll.push(value);
+    }
+    cout << "初始值为:";
+    ll.display();
+    cin >> value;
+    ll.deletelinknode(value);
+    cout << "删除值为" << value << "的结点后为:";
+    ll.display();
+    return 0;
+}
