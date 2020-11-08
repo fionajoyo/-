@@ -1,0 +1,203 @@
+单链表倒置
+描述
+习题要求：
+
+b. 给定一个不带头结点的单链表，写出将链表倒置的算法
+
+用例：
+
+假如输入为：
+
+
+题目：
+
+#include <iostream>
+using namespace std;
+struct Node {
+    Node(int x)
+    {
+        value = x;
+        next = NULL;
+    }
+    int value;
+    Node* next;
+};
+
+/*
+TODO:链表倒置的算法
+ */
+Node* Reverse(Node* first)
+{
+}
+void print(Node* node)
+{
+    while (NULL != node) {
+        cout << node->value << " ";
+        node = node->next;
+    }
+}
+int main()
+{
+    int iNum;
+    cin >> iNum;
+    Node* a = NULL;
+    Node* pTemp;
+
+    for (int i = 0; i < iNum; i++) {
+        int tmp;
+        cin >> tmp;
+        if (i == 0) {
+            a = new Node(tmp);
+            pTemp = a;
+        } else {
+            pTemp->next = new Node(tmp);
+            pTemp = pTemp->next;
+        }
+    }
+
+    cout << "倒置前为：";
+    print(a);
+    cout << endl;
+    Node* r = Reverse(a);
+    cout << "倒置后为：";
+    print(r);
+    cout << endl;
+    return 0;
+}
+
+4
+
+1 2 3 4
+
+则输出为：
+
+倒置前为：1 2 3 4 
+
+倒置后为：4 3 2 1
+
+
+
+#include <iostream>
+using namespace std;
+struct Node {
+    Node(int x)
+    {
+        value = x;
+        next = NULL;
+    }
+    int value;
+    Node* next;
+};
+
+/*
+TODO:链表倒置的算法
+ */
+Node* Reverse(Node* first)
+{
+}
+void print(Node* node)
+{
+    while (NULL != node) {
+        cout << node->value << " ";
+        node = node->next;
+    }
+}
+int main()
+{
+    int iNum;
+    cin >> iNum;
+    Node* a = NULL;
+    Node* pTemp;
+
+    for (int i = 0; i < iNum; i++) {
+        int tmp;
+        cin >> tmp;
+        if (i == 0) {
+            a = new Node(tmp);
+            pTemp = a;
+        } else {
+            pTemp->next = new Node(tmp);
+            pTemp = pTemp->next;
+        }
+    }
+
+    cout << "倒置前为：";
+    print(a);
+    cout << endl;
+    Node* r = Reverse(a);
+    cout << "倒置后为：";
+    print(r);
+    cout << endl;
+    return 0;
+}
+
+
+
+
+
+
+
+标准答案：
+#include <iostream>
+using namespace std;
+struct Node {
+    Node(int x)
+    {
+        value = x;
+        next = NULL;
+    }
+    int value;
+    Node* next;
+};
+
+/*
+TODO:链表倒置的算法
+ */
+Node* Reverse(Node* first)
+{
+    Node *p = first, *q = p->next;
+    first->next = NULL; //记得把第一个的next赋值为NULL
+    while (q != NULL) {
+        Node* QNextTemp = q->next;
+        q->next = p;
+        p = q;
+        q = QNextTemp;
+    }
+    return p;
+}
+void print(Node* node)
+{
+    while (NULL != node) {
+        cout << node->value << " ";
+        node = node->next;
+    }
+}
+int main()
+{
+    int iNum;
+    cin >> iNum;
+    Node* a = NULL;
+    Node* pTemp;
+
+    for (int i = 0; i < iNum; i++) {
+        int tmp;
+        cin >> tmp;
+        if (i == 0) {
+            a = new Node(tmp);
+            pTemp = a;
+        } else {
+            pTemp->next = new Node(tmp);
+            pTemp = pTemp->next;
+        }
+    }
+
+    cout << "倒置前为：";
+    print(a);
+    cout << endl;
+    Node* r = Reverse(a);
+    cout << "倒置后为：";
+    print(r);
+    cout << endl;
+    return 0;
+}
+
