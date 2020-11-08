@@ -1,0 +1,233 @@
+双链表改造
+描述
+习题要求：
+
+e.设双链表表示的线性表L=（a1,a2,......,an）,试写一时间复杂度为O(n)的算法，将L改造为L=（a1,a3,......,an,......,a4,a2）。
+
+
+
+用例：
+
+假如输入为：
+
+1
+
+11
+
+2 3 4 5 6 7 8 9 10 11
+
+则输出为：
+
+改造前正向输出:1 2 3 4 5 6 7 8 9 10 11
+
+改造后正向输出:1 3 5 7 9 11 10 8 6 4 2
+
+改造后逆向输出:2 4 6 8 10 11 9 7 5 3 1
+
+
+
+/*课后习题1.8-e
+
+	e.	设双链表表示的线性表L=（a1,a2,……,an），试写一时间复杂度为O(n)的算法，
+		将L改造为L=（a1,a3,……,an,……,a4,a2）。
+
+		void Change(Node* a)
+
+*/
+#include <iostream>
+using namespace std;
+const int MinNumber = -1000000;
+struct Node {
+    Node(int x)
+    {
+        value = x;
+        before = NULL;
+        next = NULL;
+    }
+    int value;
+    Node* before;
+    Node* next;
+};
+
+/*
+TODO:设双链表表示的线性表L=（a1,a2,……,an），试写一时间复杂度为O(n)的算法，
+		将L改造为L=（a1,a3,……,an,……,a4,a2）
+		假如a=(1,2,3,4,5,6,7,8,9,10,11),经过改造后，a变为(1,3,5,7,9,11,10,8,6,4,2)
+ */
+void Change(Node* a)
+{
+}
+
+int main()
+{
+    //由题目可得n>=3,先建立双向链表
+    int initValue, count, iValue;
+    cin >> initValue >> count;
+    Node* ha = new Node(initValue); //建立初始值
+    Node* p = ha;
+    for (int i = 2; i <= count; i++) //通过for循环，建立双向链表。 count表示双向链表中元素个数
+    {
+        cin >> iValue;
+        Node* t = new Node(iValue);
+        p->next = t;
+        t->before = p;
+        p = t;
+    }
+    p->next = ha;
+    ha->before = p;
+
+    cout << "改造前正向输出:";
+    p = ha;
+    while (p->next != ha) {
+        cout << p->value << " ";
+        p = p->next;
+    }
+    cout << p->value << endl;
+
+    Change(ha);
+
+    cout << "改造后正向输出:";
+    p = ha;
+    while (p->next != ha) {
+        cout << p->value << " ";
+        p = p->next;
+    }
+    cout << p->value << endl;
+    cout << "改造后逆向输出:";
+    p = ha->before;
+    while (p != ha) {
+        cout << p->value << " ";
+        p = p->before;
+    }
+    cout << p->value << endl;
+    return 0;
+}
+
+
+
+
+
+
+
+/*课后习题1.8-e
+
+	e.	设双链表表示的线性表L=（a1,a2,……,an），试写一时间复杂度为O(n)的算法，
+		将L改造为L=（a1,a3,……,an,……,a4,a2）。
+
+		void Change(Node* a)
+
+*/
+#include <iostream>
+using namespace std;
+const int MinNumber = -1000000;
+struct Node {
+    Node(int x)
+    {
+        value = x;
+        before = NULL;
+        next = NULL;
+    }
+    int value;
+    Node* before;
+    Node* next;
+};
+
+/*
+TODO:设双链表表示的线性表L=（a1,a2,……,an），试写一时间复杂度为O(n)的算法，
+		将L改造为L=（a1,a3,……,an,……,a4,a2）
+		假如a=(1,2,3,4,5,6,7,8,9,10,11),经过改造后，a变为(1,3,5,7,9,11,10,8,6,4,2)
+ */
+void Change(Node* a)
+{
+    Node* p = a;
+    Node* second = a->next;
+    Node* q = p->next->next;
+    //从1到n,沿next路径
+    while (q != a && q != a->before) {
+        p->next = q;
+        //q->before=p;不能改before！！！还要回来的
+        p = q;
+        q = q->next->next;
+    }
+    if (q == a) //总数为偶数
+    {
+        q = a->before;
+        p->next = q;
+    } else //总数为奇数
+    {
+        p->next = q;
+        p = q;
+        q = q->before;
+        p->next = q;
+    }
+    //经过以上操作，保证q为偶数
+    //从n到2,沿before路径
+    if (q != second) //如果已经是第2个了，就不用再往前走了
+        p = q->before->before;
+    else
+        p = q;
+    while (p != second) //一定会等于这个
+    {
+        q->next = p;
+        q = p;
+        p = p->before->before;
+    }
+    if (p == second) //总数为偶数
+    {
+        q->next = p; //把最后接上
+        p->next = a;
+    }
+    //最后改造所有的before路径
+    p = a;
+    while (p->next != a) {
+        q = p->next;
+        q->before = p;
+        p = p->next;
+    }
+    a->before = p;
+}
+
+int main()
+{
+    //由题目可得n>=3,先建立双向链表
+    int initValue, count, iValue;
+    cin >> initValue >> count;
+    Node* ha = new Node(initValue); //建立初始值
+    Node* p = ha;
+    for (int i = 2; i <= count; i++) //通过for循环，建立双向链表。 count表示双向链表中元素个数
+    {
+        cin >> iValue;
+        Node* t = new Node(iValue);
+        p->next = t;
+        t->before = p;
+        p = t;
+    }
+    p->next = ha;
+    ha->before = p;
+
+    cout << "改造前正向输出:";
+    p = ha;
+    while (p->next != ha) {
+        cout << p->value << " ";
+        p = p->next;
+    }
+    cout << p->value << endl;
+
+    Change(ha);
+
+    cout << "改造后正向输出:";
+    p = ha;
+    while (p->next != ha) {
+        cout << p->value << " ";
+        p = p->next;
+    }
+    cout << p->value << endl;
+    cout << "改造后逆向输出:";
+    p = ha->before;
+    while (p != ha) {
+        cout << p->value << " ";
+        p = p->before;
+    }
+    cout << p->value << endl;
+    return 0;
+}
